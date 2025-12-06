@@ -17,7 +17,7 @@ public:
     int higth() const {return array.size();}
     int with() const {return array.at(0).length();}
 
-    void print() {
+    void print() const {
         for (int i{0}; i < higth(); ++i) {
             std::cout << array.at(i) << std::endl;
         }
