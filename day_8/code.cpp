@@ -100,9 +100,10 @@ public:
 
 };
 
-aoc::ull process(const std::vector<edge> &edges, int N, int iter) {
+aoc::ull process(const std::vector<edge> &edges, const std::vector<node> &nodes, int iter) {
 
-	UnionFind uf(N);
+	int lastA{-1}, lastB{-1};
+	UnionFind uf(nodes.size());
 	for (int i{0}; i < edges.size(); ++i) {
 		const edge &E = edges.at(i);
 
@@ -110,6 +111,8 @@ aoc::ull process(const std::vector<edge> &edges, int N, int iter) {
 		if (!uf.isSameSet(E.a, E.b)) {
 			std::cout << "Union!" << std::endl;
 			uf.unionSet(E.a, E.b);
+			lastA = E.a;
+			lastB = E.b;
 		}
 
 		iter--;
@@ -119,13 +122,16 @@ aoc::ull process(const std::vector<edge> &edges, int N, int iter) {
 
 	}
 
+
+
+	//std::copy(rankList.begin(), rankList.end(), std::ostream_iterator<int>(std::cout, " "));
+	//std::cout << std::endl;
+
+	assert(lastA != -1 && lastB != -1);
+	std::cout << "Part2: " << nodes.at(lastA).x * nodes.at(lastB).x << std::endl;
+
 	std::vector<int> rankList = uf.rank;
-
 	std::sort(rankList.begin(), rankList.end());
-
-	std::copy(rankList.begin(), rankList.end(), std::ostream_iterator<int>(std::cout, " "));
-	std::cout << std::endl;
-
 	return rankList.back() * rankList.at(rankList.size()-2) * rankList.at(rankList.size()-3);
 }
 
@@ -147,7 +153,7 @@ int main() {
 
 	std::vector<edge> edges = process_nodes(nodes);
 
-	std::cout << process(edges, nodes.size(), 1000) << std::endl;
+	std::cout << process(edges, nodes, -1) << std::endl;
 
 	return 0;
 }
